@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>hoofprint</title>
+    </head>
+    <body>
+        <h1>hoofprint</h1>
+        <ul id="responses"></ul>
+        <button id="send">send</button>
+        <script>
+            var getWebsocketAddress = function() {
+                var address = window.location.protocol === 'https:' ? 'wss://': 'ws://';
+                address += window.location.host + ':9393/ws';
+                return address;
+            }
+            var responsesEl = document.querySelector('#responses');
+            var websocketAddress = getWebsocketAddress();
+            var ws = new WebSocket(websocketAddress);
+            ws.onmessage = function(msg) {
+                var li = document.createElement('li');
+                li.innerHTML = msg.data;
+                responsesEl.insertBefore(li, responsesEl.firstChild);
+            }
+            document.querySelector('#send').addEventListener('click', function(evt){
+                ws.send('hi there');
+            })
+        </script>
+    </body>
+</html>
